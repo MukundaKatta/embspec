@@ -1,0 +1,49 @@
+[project]
+name = "embspec"
+version = "0.1.0"
+description = "Embedding pipeline ops + drift detection for production RAG: index manifests, version assertions, neighbor-stability eval, Drift-Adapter for in-place model migrations."
+readme = "README.md"
+authors = [
+    { name = "Mukunda Katta", email = "mukunda.vjcs6@gmail.com" }
+]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+keywords = ["rag", "embeddings", "vector", "drift", "retrieval", "production"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = [
+    "numpy>=1.24",
+]
+
+[project.urls]
+Homepage = "https://github.com/MukundaKatta/embspec"
+Source = "https://github.com/MukundaKatta/embspec"
+Issues = "https://github.com/MukundaKatta/embspec/issues"
+Changelog = "https://github.com/MukundaKatta/embspec/blob/main/CHANGELOG.md"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.7,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
