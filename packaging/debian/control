@@ -1,0 +1,31 @@
+Source: python-embspec
+Section: python
+Priority: optional
+Maintainer: Mukunda Katta <mukunda.vjcs6@gmail.com>
+Build-Depends:
+ debhelper-compat (= 13),
+ dh-python,
+ pybuild-plugin-pyproject,
+ python3-all,
+ python3-uv-build,
+ python3-numpy,
+Standards-Version: 4.7.0
+Homepage: https://github.com/MukundaKatta/embspec
+Vcs-Browser: https://github.com/MukundaKatta/embspec
+Vcs-Git: https://github.com/MukundaKatta/embspec.git
+Rules-Requires-Root: no
+
+Package: python3-embspec
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends},
+ python3-numpy (>= 1:1.24),
+Description: Embedding pipeline ops + drift detection for production RAG
+ Three primitives that close the embedding-pipeline-ops gap left between
+ Evidently (tabular-ML drift heritage), Phoenix (full observability platform),
+ and the Drift-Adapter paper (research code): IndexManifest version
+ assertions that fail fast on encoder/index drift, DriftAdapter linear
+ least-squares migration helper that recovers 95-99% retrieval after
+ embedding-model swap without re-encoding the corpus, and a pure
+ neighbor-stability evaluator for safe deploy gating.

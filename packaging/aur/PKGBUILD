@@ -1,0 +1,25 @@
+# Maintainer: Mukunda Katta <mukunda.vjcs6@gmail.com>
+pkgname=python-embspec
+_pyname=embspec
+_pymodule=embspec
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Embedding pipeline ops + drift detection for production RAG"
+arch=('any')
+url="https://github.com/MukundaKatta/embspec"
+license=('Apache-2.0')
+depends=('python>=3.10' 'python-numpy>=1.24')
+makedepends=('python-build' 'python-installer' 'uv')
+checkdepends=('python-pytest')
+source=("$_pyname-$pkgver.tar.gz::https://github.com/MukundaKatta/$_pyname/releases/download/v$pkgver/$_pymodule-$pkgver.tar.gz")
+sha256sums=('f03d8f05d9cc4e7db508380aa2453cea034a2f6d5970dfccabc343c09fac5ea5')
+
+build() {
+  cd "$_pymodule-$pkgver"
+  python -m build --wheel --no-isolation
+}
+
+package() {
+  cd "$_pymodule-$pkgver"
+  python -m installer --destdir="$pkgdir" dist/*.whl
+}
