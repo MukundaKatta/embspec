@@ -7,13 +7,16 @@ Where embspec is published, where it's queued, and what's intentionally not happ
 | Channel | State | URL |
 |---|---|---|
 | GitHub Release | live | https://github.com/MukundaKatta/embspec/releases/tag/v0.1.0 |
-| PyPI | queued — waiting on rate-limit / admin lift | https://pypi.org/project/embspec/ (404 until publish lands) |
+| PyPI | live | https://pypi.org/project/embspec/0.1.0/ |
 | conda-forge | recipe PR submitted | https://github.com/conda-forge/staged-recipes/pull/33282 |
+| nixpkgs | derivation PR submitted | https://github.com/NixOS/nixpkgs/pull/518492 |
+| Homebrew tap | formula PR submitted | https://github.com/MukundaKatta/homebrew-tools/pull/1 |
+| MCP server | live on npm | https://www.npmjs.com/package/@mukundakatta/embspec-mcp |
 
-Install from GitHub Release until PyPI lands:
+Install:
 
 ```bash
-pip install https://github.com/MukundaKatta/embspec/releases/download/v0.1.0/embspec-0.1.0-py3-none-any.whl
+pip install embspec
 ```
 
 ## Roadmap
