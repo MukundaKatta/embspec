@@ -1,5 +1,10 @@
 # embspec
 
+[![PyPI version](https://img.shields.io/pypi/v/embspec.svg)](https://pypi.org/project/embspec/)
+[![Python versions](https://img.shields.io/pypi/pyversions/embspec.svg)](https://pypi.org/project/embspec/)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![CI](https://github.com/MukundaKatta/embspec/actions/workflows/test.yml/badge.svg)](https://github.com/MukundaKatta/embspec/actions/workflows/test.yml)
+
 Embedding pipeline ops + drift detection for production RAG.
 
 The single failure mode this library prevents: query encoder upgrade ships before the index is re-encoded; every health check stays 200 OK while retrieval accuracy silently collapses. The [decompressed.io RAG observability post-mortem (2026-03-09)](https://decompressed.io/learn/rag-observability-postmortem) describes this exact bug — \$15K of emergency re-encoding plus 2-5 days of engineer time before someone diagnosed it.
