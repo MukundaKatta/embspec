@@ -2,6 +2,11 @@
 
 from __future__ import annotations
 
+try:  # ensure src/ is importable under the stdlib runner (no-op once installed)
+    from . import _path  # noqa: F401
+except ImportError:
+    import _path  # noqa: F401
+
 from embspec import StabilityReport, neighbor_stability
 
 

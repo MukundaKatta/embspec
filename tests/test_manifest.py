@@ -3,10 +3,16 @@
 from __future__ import annotations
 
 import json
+import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-import pytest
+try:
+    import pytest
+except ImportError:  # pragma: no cover - exercised only without dev deps
+    # Needs the pytest dev dep. Skip cleanly under stdlib ``unittest`` when it
+    # is absent; ``test_manifest_unittest`` covers the same behavior there.
+    raise unittest.SkipTest("pytest not installed")
 
 from embspec import (
     EmbeddingSpec,

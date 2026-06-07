@@ -31,6 +31,17 @@ uv build                                     # build sdist + wheel
 
 Python 3.10+ required. numpy is the only runtime dependency.
 
+The numpy-free primitives (`IndexManifest`, `assert_compatible`, `embed_assert`,
+`neighbor_stability`) also have a standard-library test suite that needs no
+third-party packages at all:
+
+```bash
+python3 -m unittest discover -s tests   # skips the numpy/pytest-only modules
+```
+
+This is handy for a quick smoke test in a bare interpreter; CI still runs the
+full `pytest` suite (including the `DriftAdapter` numpy tests) with coverage.
+
 ## Workflow
 
 1. Open an issue first for anything bigger than a one-file change. This avoids spending hours on something that turns out to be out-of-scope.
