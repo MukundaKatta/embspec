@@ -41,11 +41,20 @@ class IndexManifest:
     extra: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        # A naive ``created_at`` (no tzinfo) is treated as UTC rather than the
+        # machine's local zone. ``datetime.astimezone`` would otherwise assume
+        # local time and silently shift the timestamp by the host's UTC offset,
+        # so the *same* manifest serialized on machines in different timezones
+        # would produce different ``created_at`` values — a non-reproducible,
+        # silent corruption of the field this library exists to make trustworthy.
+        created_at = self.created_at
+        if created_at.tzinfo is None:
+            created_at = created_at.replace(tzinfo=timezone.utc)
         return {
             "embspec_format_version": _FORMAT_VERSION,
             "index_name": self.index_name,
             "embedding": asdict(self.embedding),
-            "created_at": self.created_at.astimezone(timezone.utc).isoformat(),
+            "created_at": created_at.astimezone(timezone.utc).isoformat(),
             "doc_count": self.doc_count,
             "extra": self.extra,
         }
@@ -70,18 +79,42 @@ class IndexManifest:
                 f"Manifest missing required fields"
                 + (f" at {source}" if source else "")
             )
+        at_source = f" at {source}" if source else ""
         emb = data["embedding"]
-        embedding = EmbeddingSpec(
-            model_id=emb["model_id"],
-            dimension=int(emb["dimension"]),
-            model_version=emb.get("model_version"),
-            normalization=emb.get("normalization", "l2"),
-        )
-        created_at = (
-            datetime.fromisoformat(data["created_at"])
-            if "created_at" in data
-            else datetime.now(timezone.utc)
-        )
+        if not isinstance(emb, dict):
+            raise ManifestFormatError(
+                f"Manifest 'embedding' must be an object, got {type(emb).__name__}{at_source}"
+            )
+        # Corrupt field *values* (missing model_id/dimension, a non-numeric
+        # dimension, an unparseable created_at) previously leaked raw KeyError
+        # / ValueError to callers. The whole point of from_dict is to surface
+        # one typed ManifestFormatError for any malformed manifest, so callers
+        # have a single exception to catch.
+        try:
+            embedding = EmbeddingSpec(
+                model_id=emb["model_id"],
+                dimension=int(emb["dimension"]),
+                model_version=emb.get("model_version"),
+                normalization=emb.get("normalization", "l2"),
+            )
+        except KeyError as exc:
+            raise ManifestFormatError(
+                f"Manifest 'embedding' missing required field {exc.args[0]!r}{at_source}"
+            ) from exc
+        except (TypeError, ValueError) as exc:
+            raise ManifestFormatError(
+                f"Manifest 'embedding' has an invalid field value: {exc}{at_source}"
+            ) from exc
+        try:
+            created_at = (
+                datetime.fromisoformat(data["created_at"])
+                if "created_at" in data
+                else datetime.now(timezone.utc)
+            )
+        except (TypeError, ValueError) as exc:
+            raise ManifestFormatError(
+                f"Manifest 'created_at' is not a valid ISO-8601 timestamp: {exc}{at_source}"
+            ) from exc
         return cls(
             index_name=data["index_name"],
             embedding=embedding,

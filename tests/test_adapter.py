@@ -2,10 +2,19 @@
 
 from __future__ import annotations
 
+import unittest
 from pathlib import Path
 
-import numpy as np
-import pytest
+try:
+    import numpy as np
+    import pytest
+except ImportError:  # pragma: no cover - exercised only without dev deps
+    # These tests need numpy (runtime dep) and pytest (dev dep). Under the
+    # stdlib ``python3 -m unittest`` runner without those installed, skip the
+    # whole module cleanly instead of erroring; ``test_manifest_unittest`` &c.
+    # cover the numpy-free primitives there. CI installs the deps and runs the
+    # full suite via pytest.
+    raise unittest.SkipTest("numpy/pytest not installed")
 
 from embspec import AdapterShapeError, DriftAdapter
 
